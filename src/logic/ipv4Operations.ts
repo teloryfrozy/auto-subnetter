@@ -5,35 +5,26 @@ export class IPv4 {
     slash: number;
     nbBitsHostPart: number;
 
-    /* todo: 
-      validate only 2 parts
-      validate only 4 parts and they are all int btw 0 and 254
-      validate slash is an int btw 0 and 32
-
-
-      features:
-display network, broadcast, first, last, nb ip av, subnet
-      */
-
     constructor(ip: string) {
-        /* todo: 
-        validate only 2 parts
-        validate only 4 parts and they are all int btw 0 and 254
-        validate slash is an int btw 0 and 32 */
         if (ip.split("/").length != 2) {
-            throw "IPv4 has 2 parts";
+            throw "IPv4 does not have 2 parts";
         }
         if (ip.split("/")[0].split(".").length != 4) {
-            throw "IPv4 is composed of 4 bytes";
+            throw "IPv4 is not composed of 4 bytes";
         }
-        // default ip otherwise ts complains
         this.ip = [];
 
         ip.split("/")[0]
             .split(".")
             .forEach((byte) => this.ip.push(byte));
+
+        this.ip.forEach((byte) => {
+            if (Number(byte) < 0 || Number(byte) > 255) {
+                throw "Byte values must all be between 0 and 255";
+            }
+        });
         this.slash = Number(ip.split("/")[1]);
-        if (this.slash === 0) {
+        if (this.slash < 1 || this.slash > 32) {
             throw "Illegal slash";
         }
         this.nbBitsHostPart = 32 - this.slash;
@@ -69,7 +60,7 @@ display network, broadcast, first, last, nb ip av, subnet
         return Math.max(2 ** (32 - this.slash) - 2, 0);
     }
 
-    getFirstIpAvailable(): string {
+    getFirstHostAvailable(): string {
         if (this.slash === 32) {
             return this.ip.join(".");
         }
@@ -84,7 +75,7 @@ display network, broadcast, first, last, nb ip av, subnet
         return firstIpAvailable.join(".");
     }
 
-    getLastIpAvailable(): string {
+    getLastHostAvailable(): string {
         if (this.slash === 32) {
             return this.ip.join(".");
         }

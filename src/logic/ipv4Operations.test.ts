@@ -32,26 +32,26 @@ describe("IPv4 class features test", () => {
         expect(ip32.getNbHostsAvailable()).toEqual(0);
     });
 
-    it("First IP Available", () => {
-        expect(ip1.getFirstIpAvailable()).toEqual("128.0.0.1");
-        expect(ip21.getFirstIpAvailable()).toEqual("192.168.0.1");
-        expect(ip22.getFirstIpAvailable()).toEqual("192.168.0.1");
-        expect(ip24.getFirstIpAvailable()).toEqual("192.168.1.1");
-        expect(ip28.getFirstIpAvailable()).toEqual("192.168.1.1");
-        expect(ip30.getFirstIpAvailable()).toEqual("192.168.1.1");
-        expect(ip31.getFirstIpAvailable()).toEqual("192.168.1.1");
-        expect(ip32.getFirstIpAvailable()).toEqual("192.168.1.1");
+    it("First Host Available", () => {
+        expect(ip1.getFirstHostAvailable()).toEqual("128.0.0.1");
+        expect(ip21.getFirstHostAvailable()).toEqual("192.168.0.1");
+        expect(ip22.getFirstHostAvailable()).toEqual("192.168.0.1");
+        expect(ip24.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip28.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip30.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip31.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip32.getFirstHostAvailable()).toEqual("192.168.1.1");
     });
 
-    it("Last IP Available", () => {
-        expect(ip1.getLastIpAvailable()).toEqual("255.255.255.254");
-        expect(ip21.getLastIpAvailable()).toEqual("192.168.7.254");
-        expect(ip22.getLastIpAvailable()).toEqual("192.168.3.254");
-        expect(ip24.getLastIpAvailable()).toEqual("192.168.1.254");
-        expect(ip28.getLastIpAvailable()).toEqual("192.168.1.14");
-        expect(ip30.getLastIpAvailable()).toEqual("192.168.1.2");
-        expect(ip31.getLastIpAvailable()).toEqual("192.168.1.0");
-        expect(ip32.getLastIpAvailable()).toEqual("192.168.1.1");
+    it("Last Host Available", () => {
+        expect(ip1.getLastHostAvailable()).toEqual("255.255.255.254");
+        expect(ip21.getLastHostAvailable()).toEqual("192.168.7.254");
+        expect(ip22.getLastHostAvailable()).toEqual("192.168.3.254");
+        expect(ip24.getLastHostAvailable()).toEqual("192.168.1.254");
+        expect(ip28.getLastHostAvailable()).toEqual("192.168.1.14");
+        expect(ip30.getLastHostAvailable()).toEqual("192.168.1.2");
+        expect(ip31.getLastHostAvailable()).toEqual("192.168.1.0");
+        expect(ip32.getLastHostAvailable()).toEqual("192.168.1.1");
     });
 
     it("Broadcast", () => {
