@@ -12,11 +12,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.19.0"
-      - run: npm install
+      - run: npm ci
       - run: npm run format
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply frontend code formatting changes
-          file_pattern: ". :!package-lock.json"
           branch: ${{ github.head_ref }}
