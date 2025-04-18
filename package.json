@@ -16,7 +16,7 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"format": "prettier --write --config ./.prettierrc.json"
+		"format": "prettier --ignore-unknown '**/*.!(yaml)' --write --config .prettierrc.json ."
 	},
 	"devDependencies": {
 		"prettier": "^2.4.1",
