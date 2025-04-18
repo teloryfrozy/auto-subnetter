@@ -33,10 +33,15 @@ display network, broadcast, first, last, nb ip av, subnet
             .split(".")
             .forEach((byte) => this.ip.push(byte));
         this.slash = Number(ip.split("/")[1]);
+        if (this.slash === 0) {
+            throw "Illegal slash";
+        }
         this.nbBitsHostPart = 32 - this.slash;
     }
 
     getMask(): string {
+        if (this.slash === 32) return "255.255.255.255";
+
         const n = Math.floor(this.slash / 8);
         let mask = [];
 
@@ -61,10 +66,13 @@ display network, broadcast, first, last, nb ip av, subnet
     }
 
     getNbHostsAvailable(): number {
-        return 2 ** (32 - this.slash) - 2;
+        return Math.max(2 ** (32 - this.slash) - 2, 0);
     }
 
     getFirstIpAvailable(): string {
+        if (this.slash === 32) {
+            return this.ip.join(".");
+        }
         let firstIpAvailable = [];
         this.getNetwork()
             .split(".")
@@ -77,6 +85,9 @@ display network, broadcast, first, last, nb ip av, subnet
     }
 
     getLastIpAvailable(): string {
+        if (this.slash === 32) {
+            return this.ip.join(".");
+        }
         let lastIpAvailable = [];
         this.getBroadcast()
             .split(".")
@@ -89,6 +100,9 @@ display network, broadcast, first, last, nb ip av, subnet
     }
 
     getBroadcast(): string {
+        if (this.slash === 32) {
+            return this.ip.join(".");
+        }
         // the first n bytes are fixed
         const n = Math.floor(this.slash / 8);
 
@@ -117,6 +131,9 @@ display network, broadcast, first, last, nb ip av, subnet
     }
 
     getNetwork(): string {
+        if (this.slash === 32) {
+            return this.ip.join(".");
+        }
         // the first n bytes are fixed
         const n = Math.floor(this.slash / 8);
 
