@@ -45,8 +45,7 @@ display network, broadcast, first, last, nb ip av, subnet
         }
 
         // number of bits for the network part on the (n+1)byte
-        const networkBits =
-            this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
+        const networkBits = this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
 
         // all the network bits are set to ones and the remainding bits are zeroes
         let nextByte = "1".repeat(networkBits) + "0".repeat(8 - networkBits);
@@ -98,13 +97,10 @@ display network, broadcast, first, last, nb ip av, subnet
             broadcast.push(Number(this.ip[i]));
         }
         // number of bits for the network part on the (n+1)byte
-        const networkBits =
-            this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
+        const networkBits = this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
 
         // convert the n byte into bin and keep its network part
-        let nextByte = ("00000000" + decimalToBinary(Number(this.ip[n])))
-            .slice(-8)
-            .slice(0, networkBits);
+        let nextByte = ("00000000" + decimalToBinary(Number(this.ip[n]))).slice(-8).slice(0, networkBits);
 
         // fill the rest of the byte part with ones
         for (let i = networkBits + 1; i < 9; i++) {
@@ -129,13 +125,10 @@ display network, broadcast, first, last, nb ip av, subnet
             network.push(Number(this.ip[i]));
         }
         // number of bits for the network part on the (n+1)byte
-        const networkBits =
-            this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
+        const networkBits = this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
 
         // convert the n byte into bin and keep its network part
-        let nextByte = ("00000000" + decimalToBinary(Number(this.ip[n])))
-            .slice(-8)
-            .slice(0, networkBits);
+        let nextByte = ("00000000" + decimalToBinary(Number(this.ip[n]))).slice(-8).slice(0, networkBits);
 
         // fill the rest of the byte part with zeroes
         for (let i = networkBits + 1; i < 9; i++) {
