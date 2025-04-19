@@ -33,7 +33,7 @@
 </div>
 
 {#if errorMsg}
-    <div class="alert alert-danger text-center">{errorMsg}</div>
+    <div class="alert alert-danger text-center mt-4">{errorMsg}</div>
 {/if}
 {#if ip}
     <div class="container">
