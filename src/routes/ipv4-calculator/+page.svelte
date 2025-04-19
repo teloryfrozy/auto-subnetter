@@ -36,7 +36,7 @@
     <div class="alert alert-danger text-center mt-4">{errorMsg}</div>
 {/if}
 {#if ip}
-    <div class="container">
+    <div class="container d-flex justify-content-center">
         <table class="table table-striped table-bordered mt-4">
             <thead class="table-primary">
                 <tr>

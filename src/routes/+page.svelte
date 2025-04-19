@@ -1,25 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { IPv4 } from "../logic/ipv4Operations";
-
-    type Subnet = {
-        name: string;
-        hostsNeeded: number;
-        hostsAvailable: number;
-        unusedHosts: number;
-        network: string;
-        broadcast: string;
-        firstHost: string;
-        lastHost: string;
-        slashMask: string;
-    };
+    import { IPv4, Subnetting, type Subnet } from "../logic/ipv4Operations";
 
     let ipInput = "192.168.1.0/24";
     let nbSubnets = 3;
     let subnets: Subnet[] = [];
+    let subnetsResults: Subnet[] = [];
     let errorMsg = "";
     let ip: IPv4 | null = null;
-    let vlsm = true;
+    // let vlsm = true;
+    let vlsm = false;
 
     function calculate() {
         errorMsg = "";
@@ -39,10 +29,16 @@
             return;
         }
 
-        if (vlsm) {
-            // VLSM calculation logic
-        } else {
-            // FLSM calculation logic
+        try {
+            const subnetting = new Subnetting(new IPv4(ipInput), subnets);
+            if (vlsm) {
+                // VLSM calculation logic
+            } else {
+                subnetsResults = subnetting.getFLSMSubnets();
+            }
+        } catch (error) {
+            errorMsg = error as string;
+            return;
         }
     }
 
@@ -63,7 +59,8 @@
                             broadcast: "",
                             firstHost: "",
                             lastHost: "",
-                            slashMask: "",
+                            slashMask: -1,
+                            mask: "",
                         },
                     ];
                 }
@@ -110,7 +107,7 @@
 {#if errorMsg}
     <div class="alert alert-danger text-center mt-4">{errorMsg}</div>
 {:else if subnets.length > 0}
-    <div class="container" style="width: 30%;">
+    <div class="container d-flex justify-content-center" style="width: 30%;">
         <table class="table table-striped table-bordered mt-4">
             <thead class="table-primary">
                 <tr>
@@ -129,7 +126,37 @@
         </table>
     </div>
 {/if}
-
-<!-- todo: total hosts available total hosts needed total hosts Unused 
-list of stuff to show for each row Name Hosts Needed
-Hosts Available Unused hosts Network Broadcast Host Range Slash Mask -->
+{#if subnetsResults.length > 0}
+    <div class="container d-flex justify-content-center">
+        <table class="table table-striped table-bordered mt-4">
+            <thead class="table-primary">
+                <tr>
+                    <th>Name</th>
+                    <th>Hosts needed</th>
+                    <th>Hosts available</th>
+                    <th>Unused Hosts</th>
+                    <th>Network</th>
+                    <th>Broadcast</th>
+                    <th>Host range</th>
+                    <th>Slash mask</th>
+                    <th>Mask</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each subnetsResults as subnet}
+                    <tr>
+                        <td>{subnet.name}</td>
+                        <td>{subnet.hostsNeeded}</td>
+                        <td>{subnet.hostsAvailable}</td>
+                        <td>{subnet.unusedHosts}</td>
+                        <td>{subnet.network}</td>
+                        <td>{subnet.broadcast}</td>
+                        <td>{subnet.firstHost}-{subnet.lastHost}</td>
+                        <td>{subnet.slashMask}</td>
+                        <td>{subnet.mask}</td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+{/if}

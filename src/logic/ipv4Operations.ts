@@ -1,7 +1,20 @@
-import { decimalToBinary } from "../utils";
+import { binaryToDecimal, decimalToBinary } from "../utils";
+
+export type Subnet = {
+    name: string;
+    hostsNeeded: number;
+    hostsAvailable: number;
+    unusedHosts: number;
+    network: string;
+    broadcast: string;
+    firstHost: string;
+    lastHost: string;
+    slashMask: number;
+    mask: string;
+};
 
 export class IPv4 {
-    ip: string[];
+    ip: number[];
     slash: number;
     nbBitsHostPart: number;
 
@@ -19,10 +32,10 @@ export class IPv4 {
 
         ip.split("/")[0]
             .split(".")
-            .forEach((byte) => this.ip.push(byte));
+            .forEach((byte) => this.ip.push(Number(byte)));
 
         this.ip.forEach((byte) => {
-            if (Number(byte) < 0 || Number(byte) > 255) {
+            if (byte < 0 || byte > 255) {
                 throw "Byte values must all be between 0 and 255";
             }
         });
@@ -49,7 +62,7 @@ export class IPv4 {
         // all the network bits are set to ones and the remainding bits are zeroes
         let nextByte = "1".repeat(networkBits) + "0".repeat(8 - networkBits);
 
-        mask.push(parseInt(nextByte, 2));
+        mask.push(binaryToDecimal(nextByte));
 
         // finish by filling with zeroes the remaining bytes
         for (let i = n + 2; i < 5; i++) {
@@ -102,19 +115,19 @@ export class IPv4 {
 
         let broadcast = [];
         for (let i = 0; i < n; i++) {
-            broadcast.push(Number(this.ip[i]));
+            broadcast.push(this.ip[i]);
         }
         // number of bits for the network part on the (n+1)byte
         const networkBits = this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
 
         // convert the n byte into bin and keep its network part
-        let nextByte = ("00000000" + decimalToBinary(Number(this.ip[n]))).slice(-8).slice(0, networkBits);
+        let nextByte = ("00000000" + decimalToBinary(this.ip[n])).slice(-8).slice(0, networkBits);
 
         // fill the rest of the byte part with ones
         for (let i = networkBits + 1; i < 9; i++) {
             nextByte += "1";
         }
-        broadcast.push(parseInt(nextByte, 2));
+        broadcast.push(binaryToDecimal(nextByte));
 
         // finish by filling with 255 the remaining bytes
         for (let i = n + 2; i < 5; i++) {
@@ -133,19 +146,19 @@ export class IPv4 {
 
         let network = [];
         for (let i = 0; i < n; i++) {
-            network.push(Number(this.ip[i]));
+            network.push(this.ip[i]);
         }
         // number of bits for the network part on the (n+1)byte
         const networkBits = this.nbBitsHostPart % 8 != 0 ? 8 - (this.nbBitsHostPart % 8) : 0;
 
         // convert the n byte into bin and keep its network part
-        let nextByte = ("00000000" + decimalToBinary(Number(this.ip[n]))).slice(-8).slice(0, networkBits);
+        let nextByte = ("00000000" + decimalToBinary(this.ip[n])).slice(-8).slice(0, networkBits);
 
         // fill the rest of the byte part with zeroes
         for (let i = networkBits + 1; i < 9; i++) {
             nextByte += "0";
         }
-        network.push(parseInt(nextByte, 2));
+        network.push(binaryToDecimal(nextByte));
 
         // finish by filling with 0 the remaining bytes
         for (let i = n + 2; i < 5; i++) {
@@ -153,5 +166,77 @@ export class IPv4 {
         }
 
         return network.join(".");
+    }
+}
+
+export class Subnetting {
+    ip: IPv4;
+    subnets: Subnet[];
+
+    constructor(ip: IPv4, subnets: Subnet[]) {
+        this.ip = ip;
+        this.subnets = subnets;
+    }
+
+    getFLSMSubnets(): Subnet[] {
+        // descending order to get largest subnet first
+        this.subnets.sort((a, b) => b.hostsNeeded - a.hostsNeeded);
+
+        let power = 0;
+        while (2 ** power - 2 < this.subnets[0].hostsNeeded) {
+            power++;
+        }
+        const slash = 32 - power;
+
+        // check if there are enough bits to create the subnets
+        if (!(2 ** (slash - this.ip.slash) >= this.subnets.length)) {
+            throw "Subnetting is not possible, mask is too small";
+        }
+
+        const nbSubnetBitsPart = 32 - power - this.ip.slash;
+        let subnetPart = "0".repeat(nbSubnetBitsPart);
+
+        // represents the immutable part of the subnet
+        let binSubnetBase = "";
+        this.ip.ip.forEach((byte) => (binSubnetBase += ("00000000" + decimalToBinary(byte)).slice(-8)));
+        // we keep only the immutable part of the subnet
+        binSubnetBase = binSubnetBase.slice(0, this.ip.slash);
+
+        let subnets: Subnet[] = [];
+
+        for (let currentSubnetIndex = 0; currentSubnetIndex < this.subnets.length; currentSubnetIndex++) {
+            const currentSubnet = binSubnetBase + subnetPart + "0".repeat(this.ip.nbBitsHostPart - nbSubnetBitsPart);
+
+            // convert the string into an array of numbers
+            let network = "";
+
+            for (let i = 0; i < 32; i += 8) {
+                const byte = currentSubnet.slice(i, i + 8);
+                network += binaryToDecimal(byte) + (i < 24 ? "." : "");
+            }
+            const currentSubnetIpv4 = new IPv4(network + "/" + slash);
+
+            subnets.push({
+                name: this.subnets[currentSubnetIndex].name,
+                hostsNeeded: this.subnets[currentSubnetIndex].hostsNeeded,
+                hostsAvailable: currentSubnetIpv4.getNbHostsAvailable(),
+                unusedHosts: currentSubnetIpv4.getNbHostsAvailable() - this.subnets[currentSubnetIndex].hostsNeeded,
+                network: network,
+                broadcast: currentSubnetIpv4.getBroadcast(),
+                firstHost: currentSubnetIpv4.getFirstHostAvailable(),
+                lastHost: currentSubnetIpv4.getLastHostAvailable(),
+                slashMask: slash,
+                mask: currentSubnetIpv4.getMask(),
+            });
+
+            // increment the subnet part
+            // convert back to binary
+            // ensure the bin number is represented over nbSubnetBitsPart bits
+            subnetPart = ("0".repeat(nbSubnetBitsPart) + decimalToBinary(binaryToDecimal(subnetPart) + 1)).slice(
+                -nbSubnetBitsPart
+            );
+        }
+
+        return subnets;
     }
 }
