@@ -1,9 +1,9 @@
 <script lang="ts">
     import { IPv4 } from "../../logic/ipv4Operations";
 
-    let ipInput = "192.168.1.1/24";
+    let ipInput = "192.168.1.0/24";
     let errorMsg = "";
-    let ip: IPv4 | null = new IPv4("192.168.1.1/24");
+    let ip: IPv4 | null = new IPv4("192.168.1.0/24");
 
     function calculate() {
         try {
@@ -27,7 +27,7 @@
         type="text"
         class="form-control me-2"
         style="width: auto;"
-        placeholder="192.168.1.1/24"
+        placeholder="192.168.1.0/24"
     />
     <button on:click={calculate} class="btn btn-primary">Calculate</button>
 </div>

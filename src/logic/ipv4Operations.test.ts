@@ -1,14 +1,14 @@
 import { IPv4 } from "./ipv4Operations";
 
 describe("IPv4 class features test", () => {
-    const ip1 = new IPv4("192.168.1.1/1");
-    const ip21 = new IPv4("192.168.1.1/21");
-    const ip22 = new IPv4("192.168.1.1/22");
-    const ip24 = new IPv4("192.168.1.1/24");
-    const ip28 = new IPv4("192.168.1.1/28");
-    const ip30 = new IPv4("192.168.1.1/30");
-    const ip31 = new IPv4("192.168.1.1/31");
-    const ip32 = new IPv4("192.168.1.1/32");
+    const ip1 = new IPv4("192.168.1.0/1");
+    const ip21 = new IPv4("192.168.1.0/21");
+    const ip22 = new IPv4("192.168.1.0/22");
+    const ip24 = new IPv4("192.168.1.0/24");
+    const ip28 = new IPv4("192.168.1.0/28");
+    const ip30 = new IPv4("192.168.1.0/30");
+    const ip31 = new IPv4("192.168.1.0/31");
+    const ip32 = new IPv4("192.168.1.0/32");
 
     it("Mask", () => {
         expect(ip1.getMask()).toEqual("128.0.0.0");
@@ -36,11 +36,11 @@ describe("IPv4 class features test", () => {
         expect(ip1.getFirstHostAvailable()).toEqual("128.0.0.1");
         expect(ip21.getFirstHostAvailable()).toEqual("192.168.0.1");
         expect(ip22.getFirstHostAvailable()).toEqual("192.168.0.1");
-        expect(ip24.getFirstHostAvailable()).toEqual("192.168.1.1");
-        expect(ip28.getFirstHostAvailable()).toEqual("192.168.1.1");
-        expect(ip30.getFirstHostAvailable()).toEqual("192.168.1.1");
-        expect(ip31.getFirstHostAvailable()).toEqual("192.168.1.1");
-        expect(ip32.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip24.getFirstHostAvailable()).toEqual("192.168.1.0");
+        expect(ip28.getFirstHostAvailable()).toEqual("192.168.1.0");
+        expect(ip30.getFirstHostAvailable()).toEqual("192.168.1.0");
+        expect(ip31.getFirstHostAvailable()).toEqual("192.168.1.0");
+        expect(ip32.getFirstHostAvailable()).toEqual("192.168.1.0");
     });
 
     it("Last Host Available", () => {
@@ -48,10 +48,10 @@ describe("IPv4 class features test", () => {
         expect(ip21.getLastHostAvailable()).toEqual("192.168.7.254");
         expect(ip22.getLastHostAvailable()).toEqual("192.168.3.254");
         expect(ip24.getLastHostAvailable()).toEqual("192.168.1.254");
-        expect(ip28.getLastHostAvailable()).toEqual("192.168.1.14");
+        expect(ip28.getLastHostAvailable()).toEqual("192.168.1.04");
         expect(ip30.getLastHostAvailable()).toEqual("192.168.1.2");
         expect(ip31.getLastHostAvailable()).toEqual("192.168.1.0");
-        expect(ip32.getLastHostAvailable()).toEqual("192.168.1.1");
+        expect(ip32.getLastHostAvailable()).toEqual("192.168.1.0");
     });
 
     it("Broadcast", () => {
@@ -59,10 +59,10 @@ describe("IPv4 class features test", () => {
         expect(ip21.getBroadcast()).toEqual("192.168.7.255");
         expect(ip22.getBroadcast()).toEqual("192.168.3.255");
         expect(ip24.getBroadcast()).toEqual("192.168.1.255");
-        expect(ip28.getBroadcast()).toEqual("192.168.1.15");
+        expect(ip28.getBroadcast()).toEqual("192.168.1.05");
         expect(ip30.getBroadcast()).toEqual("192.168.1.3");
-        expect(ip31.getBroadcast()).toEqual("192.168.1.1");
-        expect(ip32.getBroadcast()).toEqual("192.168.1.1");
+        expect(ip31.getBroadcast()).toEqual("192.168.1.0");
+        expect(ip32.getBroadcast()).toEqual("192.168.1.0");
     });
 
     it("Network", () => {
@@ -73,6 +73,6 @@ describe("IPv4 class features test", () => {
         expect(ip28.getNetwork()).toEqual("192.168.1.0");
         expect(ip30.getNetwork()).toEqual("192.168.1.0");
         expect(ip31.getNetwork()).toEqual("192.168.1.0");
-        expect(ip32.getNetwork()).toEqual("192.168.1.1");
+        expect(ip32.getNetwork()).toEqual("192.168.1.0");
     });
 });

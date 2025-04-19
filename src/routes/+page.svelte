@@ -14,7 +14,7 @@
         slashMask: string;
     }
 
-    let ipInput = "192.168.1.1/24";
+    let ipInput = "192.168.1.0/24";
     let nbSubnets = 3;
     let subnets: Subnet[] = [];
     let errorMsg = "";
@@ -68,7 +68,7 @@
         type="text"
         class="form-control me-2"
         style="width: auto;"
-        placeholder="192.168.1.1/24"
+        placeholder="192.168.1.0/24"
     />
 
      
