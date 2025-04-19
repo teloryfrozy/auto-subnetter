@@ -7,13 +7,13 @@ export class IPv4 {
 
     constructor(ip: string) {
         if (!ip) {
-            throw new Error("IPv4 is empty");
+            throw "IPv4 is empty";
         }
         if (ip.split("/").length != 2) {
-            throw new Error("IPv4 does not have 2 parts");
+            throw "IPv4 does not have 2 parts";
         }
         if (ip.split("/")[0].split(".").length != 4) {
-            throw new Error("IPv4 is not composed of 4 bytes");
+            throw "IPv4 is not composed of 4 bytes";
         }
         this.ip = [];
 
@@ -23,12 +23,12 @@ export class IPv4 {
 
         this.ip.forEach((byte) => {
             if (Number(byte) < 0 || Number(byte) > 255) {
-                throw new Error("Byte values must all be between 0 and 255");
+                throw "Byte values must all be between 0 and 255";
             }
         });
         this.slash = Number(ip.split("/")[1]);
         if (this.slash < 1 || this.slash > 32) {
-            throw new Error("Illegal slash");
+            throw "Illegal slash";
         }
         this.nbBitsHostPart = 32 - this.slash;
     }

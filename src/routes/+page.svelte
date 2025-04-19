@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { IPv4 } from "../logic/ipv4Operations";
-
 
     type Subnet = {
         name: string;
@@ -12,7 +12,7 @@
         firstHost: string;
         lastHost: string;
         slashMask: string;
-    }
+    };
 
     let ipInput = "192.168.1.0/24";
     let nbSubnets = 3;
@@ -21,102 +21,115 @@
     let ip: IPv4 | null = null;
     let vlsm = true;
 
-
-    function calculate( ) {
+    function calculate() {
+        errorMsg = "";
         try {
             ip = new IPv4(ipInput);
-            errorMsg = "";
         } catch (error) {
             errorMsg = error as string;
             ip = null;
+            return;
         }
+        if (subnets.length === 0) {
+            errorMsg = "Please add subnets";
+            return;
+        }
+        if (subnets.some((subnet) => subnet.hostsNeeded <= 0)) {
+            errorMsg = "Invalid number of hosts of a subnet";
+            return;
+        }
+
         if (vlsm) {
-            // VLSM calculation logic 
+            // VLSM calculation logic
         } else {
-            // FLSM calculation logic 
+            // FLSM calculation logic
         }
     }
 
     function addSubnets() {
+        errorMsg = "";
         if (nbSubnets > 0) {
-            // Add subnets logic
+            if (subnets.length < nbSubnets) {
+                // add missing subnets
+                for (let i = subnets.length; i < nbSubnets; i++) {
+                    subnets = [
+                        ...subnets,
+                        {
+                            name: `Subnet ${i + 1}`,
+                            hostsNeeded: 0,
+                            hostsAvailable: 0,
+                            unusedHosts: 0,
+                            network: "",
+                            broadcast: "",
+                            firstHost: "",
+                            lastHost: "",
+                            slashMask: "",
+                        },
+                    ];
+                }
+            } else {
+                // remove extra subnets
+                subnets = subnets.slice(0, nbSubnets);
+            }
         } else {
             errorMsg = "Invalid number of subnets";
         }
     }
+
+    onMount(() => {
+        addSubnets();
+    });
 </script>
 
-<h1>VLSM & FLSM Subnetting</h1>
 <a href="/ipv4-calculator">ipv4 calculator</a>
 
-<div class="form-check form-switch">
-    <input
-        class="form-check-input"
-        type="checkbox"
-        role="switch"
-        id="flexSwitchCheckChecked"
-        checked={vlsm}
-        on:change={() => (vlsm = !vlsm)}
-    />
-    <label class="form-check-label" for="flexSwitchCheckChecked">{vlsm ? "VLSM": "FLSM"}</label>
+<h1 class="text-center">{vlsm ? "VLSM" : "FLSM"} Subnetting</h1>
+
+<div class="container" style="width: 30%;">
+    <div class="form-check form-switch d-flex justify-content-center">
+        <input
+            class="form-check-input me-2"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckChecked"
+            checked={vlsm}
+            onchange={() => (vlsm = !vlsm)}
+        />
+        <label class="form-check-label" for="flexSwitchCheckChecked">{vlsm ? "VLSM" : "FLSM"}</label>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <input id="ipInput" bind:value={ipInput} type="text" class="form-control me-2" placeholder="192.168.1.0/24" />
+        <input id="nbSubnets" bind:value={nbSubnets} type="number" class="form-control me-2" placeholder="0" />
+        <button onclick={addSubnets} class="btn btn-primary">Add</button>
+    </div>
 </div>
- 
-<p>IP</p>
-<input
-        id="ipInput"
-        bind:value={ipInput}
-        type="text"
-        class="form-control me-2"
-        style="width: auto;"
-        placeholder="192.168.1.0/24"
-    />
 
-     
-<p>Subnets</p>
-<input
-id="nbSubnets"
-bind:value={nbSubnets}
-type="number"
-class="form-control me-2"
-style="width: auto;"
-placeholder="0"
-/>
-<button on:click={addSubnets} class="btn btn-primary">Add</button>
-    <button on:click={calculate} class="btn btn-primary">Calculate</button>
+<button onclick={calculate} class="btn btn-primary mx-auto d-block mt-4">Calculate</button>
 
-    
 {#if errorMsg}
-<div class="alert alert-danger text-center">{errorMsg}</div>
+    <div class="alert alert-danger text-center mt-4">{errorMsg}</div>
+{:else if subnets.length > 0}
+    <div class="container" style="width: 30%;">
+        <table class="table table-striped table-bordered mt-4">
+            <thead class="table-primary">
+                <tr>
+                    <th>Subnet name</th>
+                    <th>Number of hosts</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each subnets as subnet}
+                    <tr>
+                        <td><input bind:value={subnet.name} type="text" /></td>
+                        <td><input bind:value={subnet.hostsNeeded} type="number" /></td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
 {/if}
 
-    <table class="table table-striped table-bordered mt-4">
-        <thead class="table-primary">
-            <tr>
-                <th>Name</th>
-                <th>Hosts</th> 
-            </tr>
-        </thead> 
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>123</td> 
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>59</td> 
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>98</td> 
-            </tr>
-        </tbody>
-    </table>
-
-
-todo: 
-total hosts available
-total hosts needed
-total hosts Unused
-list of stuff to show for each row
-
-Name Hosts Needed Hosts Available Unused hosts Network Broadcast Host Range Slash Mask
+<!-- todo: total hosts available total hosts needed total hosts Unused 
+list of stuff to show for each row Name Hosts Needed
+Hosts Available Unused hosts Network Broadcast Host Range Slash Mask -->
