@@ -36,10 +36,10 @@ describe("IPv4 class features test", () => {
         expect(ip1.getFirstHostAvailable()).toEqual("128.0.0.1");
         expect(ip21.getFirstHostAvailable()).toEqual("192.168.0.1");
         expect(ip22.getFirstHostAvailable()).toEqual("192.168.0.1");
-        expect(ip24.getFirstHostAvailable()).toEqual("192.168.1.0");
-        expect(ip28.getFirstHostAvailable()).toEqual("192.168.1.0");
-        expect(ip30.getFirstHostAvailable()).toEqual("192.168.1.0");
-        expect(ip31.getFirstHostAvailable()).toEqual("192.168.1.0");
+        expect(ip24.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip28.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip30.getFirstHostAvailable()).toEqual("192.168.1.1");
+        expect(ip31.getFirstHostAvailable()).toEqual("192.168.1.1");
         expect(ip32.getFirstHostAvailable()).toEqual("192.168.1.0");
     });
 
@@ -48,7 +48,7 @@ describe("IPv4 class features test", () => {
         expect(ip21.getLastHostAvailable()).toEqual("192.168.7.254");
         expect(ip22.getLastHostAvailable()).toEqual("192.168.3.254");
         expect(ip24.getLastHostAvailable()).toEqual("192.168.1.254");
-        expect(ip28.getLastHostAvailable()).toEqual("192.168.1.04");
+        expect(ip28.getLastHostAvailable()).toEqual("192.168.1.14");
         expect(ip30.getLastHostAvailable()).toEqual("192.168.1.2");
         expect(ip31.getLastHostAvailable()).toEqual("192.168.1.0");
         expect(ip32.getLastHostAvailable()).toEqual("192.168.1.0");
@@ -59,9 +59,9 @@ describe("IPv4 class features test", () => {
         expect(ip21.getBroadcast()).toEqual("192.168.7.255");
         expect(ip22.getBroadcast()).toEqual("192.168.3.255");
         expect(ip24.getBroadcast()).toEqual("192.168.1.255");
-        expect(ip28.getBroadcast()).toEqual("192.168.1.05");
+        expect(ip28.getBroadcast()).toEqual("192.168.1.15");
         expect(ip30.getBroadcast()).toEqual("192.168.1.3");
-        expect(ip31.getBroadcast()).toEqual("192.168.1.0");
+        expect(ip31.getBroadcast()).toEqual("192.168.1.1");
         expect(ip32.getBroadcast()).toEqual("192.168.1.0");
     });
 
