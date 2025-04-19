@@ -10,6 +10,39 @@ describe("IPv4 class features test", () => {
     const ip31 = new IPv4("192.168.1.0/31");
     const ip32 = new IPv4("192.168.1.0/32");
 
+    it("Wrong IP", () => {
+        expect(() => {
+            new IPv4("");
+        }).toThrow("IPv4 is empty");
+        expect(() => {
+            new IPv4("192.168.1.0 24");
+        }).toThrow("IPv4 does not have 2 parts");
+        expect(() => {
+            new IPv4("/24");
+        }).toThrow("IPv4 is not composed of 4 bytes");
+        expect(() => {
+            new IPv4("192/24");
+        }).toThrow("IPv4 is not composed of 4 bytes");
+        expect(() => {
+            new IPv4("192.168.1.1.0/24");
+        }).toThrow("IPv4 is not composed of 4 bytes");
+        expect(() => {
+            new IPv4("192.168.1.-1/24");
+        }).toThrow("Byte values must all be between 0 and 255");
+        expect(() => {
+            new IPv4("192.168.1.256/24");
+        }).toThrow("Byte values must all be between 0 and 255");
+        expect(() => {
+            new IPv4("192.168.1.0/-1");
+        }).toThrow("Illegal slash");
+        expect(() => {
+            new IPv4("192.168.1.0/0");
+        }).toThrow("Illegal slash");
+        expect(() => {
+            new IPv4("192.168.1.0/33");
+        }).toThrow("Illegal slash");
+    });
+
     it("Mask", () => {
         expect(ip1.getMask()).toEqual("128.0.0.0");
         expect(ip21.getMask()).toEqual("255.255.248.0");
