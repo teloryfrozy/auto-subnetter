@@ -3,14 +3,14 @@ import { binaryToDecimal, decimalToBinary } from "../utils";
 export type Subnet = {
     name: string;
     hostsNeeded: number;
-    hostsAvailable: number;
-    unusedHosts: number;
-    network: string;
-    broadcast: string;
-    firstHost: string;
-    lastHost: string;
-    slashMask: number;
-    mask: string;
+    hostsAvailable?: number;
+    unusedHosts?: number;
+    network?: string;
+    broadcast?: string;
+    firstHost?: string;
+    lastHost?: string;
+    slashMask?: number;
+    mask?: string;
 };
 
 export class IPv4 {
