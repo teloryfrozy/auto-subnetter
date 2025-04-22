@@ -32,7 +32,7 @@
         try {
             const subnetting = new Subnetting(new IPv4(ipInput), subnets);
             if (vlsm) {
-                // VLSM calculation logic
+                subnetsResults = subnetting.getVLSMSubnets();
             } else {
                 subnetsResults = subnetting.getFLSMSubnets();
             }
