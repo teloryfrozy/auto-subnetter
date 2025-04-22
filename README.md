@@ -1,38 +1,24 @@
-# sv
+# Auto subnetter tool
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+I created this to tool to automatically create the subnetting for a given network with subnets and hosts per subnet.
+The UI is very simple and easy to use to get results asap with error messages in case of wrong input.
 
-## Creating a project
+It's usefull for networking courses where you have to compare the two subnetting methods: VLSM and FLSM and see which one has more unused IPs.
 
-If you're seeing this, you've probably already done this step. Congrats!
+_The code is not optimized as I wanted to keep my comments and understand if I get back to it at some point._
 
-```bash
-# create a new project in the current directory
-npx sv create
+# VLSM (Variable Length Subnet Mask)
 
-# create a new project in my-app
-npx sv create my-app
-```
+![VLSM-Example](imgs/vlsm-example.png)
 
-## Developing
+# FLSM (Fixed Length Subnet Mask)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+![FLSM-Example](imgs/flsm-example.png)
 
-```bash
-npm run dev
+# IPv4 Calculator
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+![IPv4-Calculator](imgs/ipv4-calculator.png)
 
-## Building
+# Improvements
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+If you want me to add some features or you have any suggestions, open an issue.

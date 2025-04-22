@@ -8,8 +8,7 @@
     let subnetsResults: Subnet[] = [];
     let errorMsg = "";
     let ip: IPv4 | null = null;
-    // let vlsm = true;
-    let vlsm = false;
+    let vlsm = true;
 
     function calculate() {
         errorMsg = "";
