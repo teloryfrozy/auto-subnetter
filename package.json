@@ -30,5 +30,8 @@
 		"ts-jest": "^29.3.2",
 		"typescript": "^5.8.3",
 		"vite": "^5.4.11"
+	},
+	"dependencies": {
+		"@sveltejs/adapter-vercel": "^5.7.0"
 	}
 }
