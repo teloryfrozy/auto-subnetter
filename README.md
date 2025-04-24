@@ -8,6 +8,7 @@ It's usefull for networking courses where you have to compare the two subnetting
 _The code is not optimized as I wanted to keep my comments and understand if I get back to it at some point._
 
 # How to use the subnetting tool
+
 ![subnetting-input](imgs/subnetting-input.png)
 
 # VLSM (Variable Length Subnet Mask)
