@@ -78,7 +78,7 @@
     });
 </script>
 
-<a href="/ipv4-calculator">ipv4 calculator</a>
+<a href="/ipv4-calculator" class="btn btn-outline-primary m-2">Ipv4 Calculator</a>
 
 <h1 class="text-center">{vlsm ? "VLSM" : "FLSM"} Subnetting</h1>
 

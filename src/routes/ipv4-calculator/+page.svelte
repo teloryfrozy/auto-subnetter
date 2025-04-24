@@ -16,7 +16,7 @@
     }
 </script>
 
-<a href="/">auto subnetter (vlsm and flsm)</a>
+<a href="/" class="btn btn-outline-primary m-2">Subnetting Tool</a>
 
 <h1 class="text-center">IPv4 Calculator</h1>
 
