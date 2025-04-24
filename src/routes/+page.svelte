@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { IPv4, Subnetting, type Subnet } from "../logic/ipv4Operations";
+    import { Subnetting, type Subnet } from "../logic/Subnetting";
+    import { IPv4 } from "../logic/IPv4";
 
     let ipInput = "192.168.1.0/24";
     let nbSubnets = 3;

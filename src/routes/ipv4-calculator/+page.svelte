@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { IPv4 } from "../../logic/ipv4Operations";
+    import { IPv4 } from "../../logic/IPv4";
 
     let ipInput = "192.168.1.0/24";
     let errorMsg = "";
