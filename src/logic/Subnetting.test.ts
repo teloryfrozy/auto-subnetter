@@ -64,6 +64,37 @@ describe("Subnetting class features test", () => {
         },
     ]);
 
+    it("Error Subnetting", () => {
+        const subnetting1 = new Subnetting(new IPv4("172.16.0.0/28"), [
+            {
+                name: "Subnet 1",
+                hostsNeeded: 500,
+            },
+        ]);
+        const subnetting2 = new Subnetting(new IPv4("10.0.0.0/30"), [
+            { name: "Subnet 1", hostsNeeded: 2 },
+            { name: "Subnet 2", hostsNeeded: 2 },
+            { name: "Subnet 3", hostsNeeded: 2 },
+            { name: "Subnet 4", hostsNeeded: 2 },
+        ]);
+
+        expect(() => {
+            subnetting1.getFLSMSubnets();
+        }).toThrow("Subnetting is not possible, mask is too small");
+
+        expect(() => {
+            subnetting2.getVLSMSubnets();
+        }).toThrow("Subnetting is not possible, mask is too small");
+
+        expect(() => {
+            subnetting1.getVLSMSubnets();
+        }).toThrow("Subnetting is not possible, mask is too small");
+
+        expect(() => {
+            subnetting2.getVLSMSubnets();
+        }).toThrow("Subnetting is not possible, mask is too small");
+    });
+
     it("VLSM for 172.16.0.0/22", () => {
         const subnets = subnet1.getVLSMSubnets();
         expect(subnets.length).toEqual(7);
@@ -171,7 +202,6 @@ describe("Subnetting class features test", () => {
     });
 
     it("FLSM for 172.16.0.0/22", () => {
-        // error in FLSM
         const subnets = subnet1.getFLSMSubnets();
         expect(subnets.length).toEqual(7);
 
@@ -259,6 +289,112 @@ describe("Subnetting class features test", () => {
                 lastHost: "172.16.3.126",
                 slashMask: 25,
                 mask: "255.255.255.128",
+            },
+        ];
+
+        expectedSubnets.forEach((expected, index) => {
+            const actual = subnets[index];
+            expect(actual.name).toEqual(expected.name);
+            expect(actual.hostsNeeded).toEqual(expected.hostsNeeded);
+            expect(actual.hostsAvailable).toEqual(expected.hostsAvailable);
+            expect(actual.unusedHosts).toEqual(expected.unusedHosts);
+            expect(actual.network).toEqual(expected.network);
+            expect(actual.broadcast).toEqual(expected.broadcast);
+            expect(actual.firstHost).toEqual(expected.firstHost);
+            expect(actual.lastHost).toEqual(expected.lastHost);
+            expect(actual.slashMask).toEqual(expected.slashMask);
+            expect(actual.mask).toEqual(expected.mask);
+        });
+    });
+
+    it("FLSM for 192.168.64.0/21", () => {
+        const subnets = subnet2.getFLSMSubnets();
+        expect(subnets.length).toEqual(7);
+
+        const expectedSubnets = [
+            {
+                name: "Subnet 1",
+                hostsNeeded: 120,
+                hostsAvailable: 254,
+                unusedHosts: 134,
+                network: "192.168.64.0",
+                broadcast: "192.168.64.255",
+                firstHost: "192.168.64.1",
+                lastHost: "192.168.64.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
+            },
+            {
+                name: "Subnet 2",
+                hostsNeeded: 60,
+                hostsAvailable: 254,
+                unusedHosts: 194,
+                network: "192.168.65.0",
+                broadcast: "192.168.65.255",
+                firstHost: "192.168.65.1",
+                lastHost: "192.168.65.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
+            },
+            {
+                name: "Subnet 3",
+                hostsNeeded: 30,
+                hostsAvailable: 254,
+                unusedHosts: 224,
+                network: "192.168.66.0",
+                broadcast: "192.168.66.255",
+                firstHost: "192.168.66.1",
+                lastHost: "192.168.66.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
+            },
+            {
+                name: "Subnet 4",
+                hostsNeeded: 15,
+                hostsAvailable: 254,
+                unusedHosts: 239,
+                network: "192.168.67.0",
+                broadcast: "192.168.67.255",
+                firstHost: "192.168.67.1",
+                lastHost: "192.168.67.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
+            },
+            {
+                name: "Subnet 5",
+                hostsNeeded: 2,
+                hostsAvailable: 254,
+                unusedHosts: 252,
+                network: "192.168.68.0",
+                broadcast: "192.168.68.255",
+                firstHost: "192.168.68.1",
+                lastHost: "192.168.68.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
+            },
+            {
+                name: "Subnet 6",
+                hostsNeeded: 2,
+                hostsAvailable: 254,
+                unusedHosts: 252,
+                network: "192.168.69.0",
+                broadcast: "192.168.69.255",
+                firstHost: "192.168.69.1",
+                lastHost: "192.168.69.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
+            },
+            {
+                name: "Subnet 7",
+                hostsNeeded: 2,
+                hostsAvailable: 254,
+                unusedHosts: 252,
+                network: "192.168.70.0",
+                broadcast: "192.168.70.255",
+                firstHost: "192.168.70.1",
+                lastHost: "192.168.70.254",
+                slashMask: 24,
+                mask: "255.255.255.0",
             },
         ];
 
