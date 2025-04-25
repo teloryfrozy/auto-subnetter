@@ -103,6 +103,9 @@ export class Subnetting {
         let slash = 32 - power;
 
         let nbSubnetBitsPart = 32 - power - this.ip.slash;
+        if (nbSubnetBitsPart < 0) {
+            throw "Subnetting is not possible, mask is too small";
+        }
         let subnetPart = "0".repeat(nbSubnetBitsPart);
 
         // represents the immutable part of the subnet

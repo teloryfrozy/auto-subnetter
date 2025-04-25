@@ -71,11 +71,12 @@ describe("Subnetting class features test", () => {
                 hostsNeeded: 500,
             },
         ]);
-        const subnetting2 = new Subnetting(new IPv4("10.0.0.0/30"), [
+        const subnetting2 = new Subnetting(new IPv4("10.0.0.0/29"), [
             { name: "Subnet 1", hostsNeeded: 2 },
             { name: "Subnet 2", hostsNeeded: 2 },
             { name: "Subnet 3", hostsNeeded: 2 },
             { name: "Subnet 4", hostsNeeded: 2 },
+            { name: "Subnet 5", hostsNeeded: 2 },
         ]);
 
         expect(() => {
